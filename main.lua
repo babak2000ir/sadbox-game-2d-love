@@ -1,5 +1,5 @@
 if arg[2] == "debug" then
-    require("lldebugger").start()
+   require("lldebugger").start()
 end
 
 local ninja = {}
@@ -16,18 +16,26 @@ function love.load()
 end
 
 function love.update(dt)
-   if love.keyboard.isDown("left") then
-      ninja.imgx = ninja.imgx - ninja.speed * ninja.scale * dt
+   if ninja.imgx > 0 then
+      if love.keyboard.isDown("left") then
+         ninja.imgx = ninja.imgx - ninja.speed * ninja.scale * dt
+      end
    end
-   if love.keyboard.isDown("right") then
-      ninja.imgx = ninja.imgx + ninja.speed * ninja.scale * dt
+   if ninja.imgx < love.graphics.getWidth() - ninja.image:getWidth() * ninja.scale then
+      if love.keyboard.isDown("right") then
+         ninja.imgx = ninja.imgx + ninja.speed * ninja.scale * dt
+      end
    end
-   if love.keyboard.isDown("up") then
-      ninja.imgy = ninja.imgy - ninja.speed * ninja.scale * dt
+   if ninja.imgy > 0 then
+      if love.keyboard.isDown("up") then
+         ninja.imgy = ninja.imgy - ninja.speed * ninja.scale * dt
+      end
    end
-   if love.keyboard.isDown("down") then
-      ninja.imgy = ninja.imgy + ninja.speed * ninja.scale * dt
-   end
+   if ninja.imgy < love.graphics.getHeight() - ninja.image:getHeight() * ninja.scale then
+      if love.keyboard.isDown("down") then
+         ninja.imgy = ninja.imgy + ninja.speed * ninja.scale * dt
+      end
+   end;
 end
 
 function love.draw()
@@ -35,7 +43,7 @@ function love.draw()
    love.graphics.draw(ninja.image, ninja.imgx, ninja.imgy, 0, ninja.scale, ninja.scale) -- draw image at imgx, imgy with no rotation and scaled to 2x size
    love.graphics.setColor(0, 0, 0)
    love.graphics.print("Click and drag ninja-frog around or use the arrow keys", 10, 10)
-   love.graphics.print(lastKeyMessage, 10, 30) 
+   love.graphics.print(lastKeyMessage, 10, 30)
 end
 
 function love.mousepressed(x, y, button, istouch)
@@ -88,9 +96,9 @@ end
 local love_errorhandler = love.errorhandler
 
 function love.errorhandler(msg)
-    if lldebugger then
-        error(msg, 2)
-    else
-        return love_errorhandler(msg)
-    end
+   if lldebugger then
+      error(msg, 2)
+   else
+      return love_errorhandler(msg)
+   end
 end
