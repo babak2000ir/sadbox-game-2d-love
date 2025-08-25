@@ -12,7 +12,7 @@ local headDisty = 0
 function love.load()
    Object = require "classic"
    tick = require "tick"
-   Sprite = require "sprite"
+   local Sprite = require "sprite"
 
    ninja = Sprite("characters/NinjaFrog/Fall (32x32).png", 100, 100, 4, 100)
    head = Sprite("scenery/Rock Head/Idle.png", 300, 100, 5, 30)

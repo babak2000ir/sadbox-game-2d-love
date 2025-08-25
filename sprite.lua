@@ -1,4 +1,4 @@
-Sprite = Object:extend()
+local Sprite = Object:extend()
 
 --Lua turns this into: Rectangle.new(self)
 function Sprite:new(asset, x, y, scale, speed)
