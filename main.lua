@@ -3,6 +3,7 @@ if arg[2] == "debug" then
 end
 
 local tick
+local Sprite
 local ninja
 local head
 local lastKeyMessage = ""
@@ -13,10 +14,10 @@ local collided = false
 function love.load()
    Object = require "classic"
    tick = require "tick"
-   local Sprite = require "sprite"
+   Sprite = require "sprite"
 
-   ninja = Sprite("characters/NinjaFrog/Fall (32x32).png", 100, 100, 4, 100)
-   head = Sprite("scenery/Rock Head/Idle.png", 300, 100, 5, 30)
+   ninja = Sprite("characters/NinjaFrog/Fall (32x32).png", 100, 100, 4, 100, { x = 4, y = 6, w = 24, h = 26 })
+   head = Sprite("scenery/Rock Head/Idle.png", 300, 100, 5, 30, { x = 5, y = 5, w = 32, h = 32 })
 
    love.graphics.setNewFont(18)
    love.graphics.setBackgroundColor(255, 255, 255)
@@ -25,25 +26,6 @@ function love.load()
       headDistx = math.random(-1, 1)
       headDisty = math.random(-1, 1)
    end, 1)
-end
-
-function checkCollision(spritea, spriteb)
-   --With locals it's common usage to use underscores instead of camelCasing
-   local a_left = spritea.imgx
-   local a_right = spritea.imgx + spritea:getWidth()
-   local a_top = spritea.imgy
-   local a_bottom = spritea.imgy + spritea:getHeight()
-
-   local b_left = spriteb.imgx
-   local b_right = spriteb.imgx + spriteb:getWidth()
-   local b_top = spriteb.imgy
-   local b_bottom = spriteb.imgy + spriteb:getHeight()
-
-   --Directly return this boolean value without using if-statement
-   return a_right > b_left
-       and a_left < b_right
-       and a_bottom > b_top
-       and a_top < b_bottom
 end
 
 function love.update(dt)
@@ -69,7 +51,7 @@ function love.update(dt)
 
    head:movex(headDistx)
    head:movey(headDisty)
-   collided = checkCollision(ninja, head)
+   collided = Sprite:checkCollision(ninja, head)
 end
 
 function love.draw()
@@ -77,9 +59,9 @@ function love.draw()
    head:draw()
    ninja:draw()
    if collided then
-      love.graphics.setColor(0, 0, 0)
-      love.graphics.rectangle("line", head.imgx, head.imgy, head:getWidth(), head:getHeight())
-      love.graphics.rectangle("line", ninja.imgx, ninja.imgy, ninja:getWidth(), ninja:getHeight())
+      love.graphics.setColor(1, 0, 0)
+      head:drawCollisionBox()
+      ninja:drawCollisionBox()
    end
    love.graphics.setColor(0, 0, 0)
    love.graphics.print("Click and drag ninja-frog around or use the arrow keys", 10, 10)
