@@ -9,6 +9,14 @@ function Sprite:new(asset, x, y, scale, speed)
     self.speed = tonumber(speed) or 100
 end
 
+function Sprite:getWidth()
+    return self.image:getWidth() * self.scale
+end
+
+function Sprite:getHeight()
+    return self.image:getHeight() * self.scale
+end
+
 function Sprite:update(dt)
     self.dt = dt
 end
